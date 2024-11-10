@@ -5,6 +5,7 @@
 
    Licensed under the MIT license: https://opensource.org/licenses/MIT
    Port by hasn0life October 29th 2024
+   added SD card support Nov 11 2024
 */
 
 // Lisp Library
@@ -16,7 +17,7 @@ const char LispLibrary[] = "";
 #define printfreespace
 #define serialmonitor
 // #define printgcs
-// #define sdcardsupport //this isnt supported yet
+// #define sdcardsupport
 #define gfxsupport
 // #define lisplibrary
 // #define extensions
@@ -32,6 +33,11 @@ const char LispLibrary[] = "";
 #include "soc/periph_defs.h" // Not sure why necessary
 #include "M5Cardputer.h"
 #include "M5GFX.h"
+
+#define SD_SPI_SCK_PIN  40
+#define SD_SPI_MISO_PIN 39
+#define SD_SPI_MOSI_PIN 14
+#define SD_SPI_CS_PIN   12
 
 #if defined(sdcardsupport)
   #include <SD.h>
@@ -553,10 +559,10 @@ char *MakeFilename (object *arg, char *buffer) {
 
 #if defined(sdcardsupport)
 void SDBegin() {
-  digitalWrite(TDECK_SDCARD_CS, HIGH);
-  digitalWrite(TDECK_LORA_CS, HIGH);
-  digitalWrite(TDECK_TFT_CS, HIGH);
-  SD.begin(TDECK_SDCARD_CS, SPI, 800000U);
+  // digitalWrite(TDECK_SDCARD_CS, HIGH);
+  // digitalWrite(TDECK_LORA_CS, HIGH);
+  // digitalWrite(TDECK_TFT_CS, HIGH);
+  SD.begin(SD_SPI_CS_PIN, SPI, 25000000);
 }
 
 void SDWriteInt (File file, int data) {
@@ -4029,7 +4035,7 @@ object *fn_note (object *args, object *env) {
   static int pin = 255;
   if (args != NULL) {
     pin = checkinteger(car(args));
-    int note = 48, octave = 0; uint16_t duration = 0; // Duration mandatory on T-Deck
+    int note = 48, octave = 0; uint16_t duration = 0; 
     args = cdr(args);
     if (args != NULL) {
       note = checkinteger(car(args));
@@ -5993,7 +5999,7 @@ object *eval (object *form, object *env) {
 
 void pserial (char c) {
   LastPrint = c;
-  if (!tstflag(NOECHO)) Display(c);         // Don't display on T-Deck when paste in listing
+  if (!tstflag(NOECHO)) Display(c);         
   #if defined (serialmonitor)
   if (c == '\n') Serial.write('\r');
   Serial.write(c);
