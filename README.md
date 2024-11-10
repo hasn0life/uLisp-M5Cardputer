@@ -6,6 +6,5 @@ Follow [this tutorial](https://docs.m5stack.com/en/arduino/m5cardputer/program).
 
 ## Status
 - screen takes a few seconds to turn on when using battery, but not when using USB for some reason
-- SD card doesn't work
 - not tested extensivly
 - Debating font size and font support
