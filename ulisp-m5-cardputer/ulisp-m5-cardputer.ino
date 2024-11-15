@@ -5,7 +5,8 @@
 
    Licensed under the MIT license: https://opensource.org/licenses/MIT
    Port by hasn0life October 29th 2024
-   added SD card support Nov 11 2024
+   added SD card support Nov 11th 2024
+   updated Nov 15th 2024
 */
 
 // Lisp Library
@@ -17,7 +18,7 @@ const char LispLibrary[] = "";
 #define printfreespace
 #define serialmonitor
 // #define printgcs
-// #define sdcardsupport
+#define sdcardsupport
 #define gfxsupport
 // #define lisplibrary
 // #define extensions
@@ -6252,9 +6253,9 @@ void decodeKeyStatus(){
   }
 }
 
-const int Columns = 40;
-const int Leading = 10; // height of the letters, between 8 and 10
-const int CharWidth = 6;
+const int Columns = 24; //40;
+const int Leading = 15; //10; // height of the letters, between 8 and 10
+const int CharWidth = 10; //6;
 const int Lines = 135/Leading;
 const int LastColumn = Columns-1;
 const int LastLine = Lines-1;
@@ -6483,7 +6484,6 @@ void PlotChar (uint8_t ch, uint8_t line, uint8_t column) {
   if (ch & 0x80) {
     M5Cardputer.Display.drawChar(x, y, ch & 0x7f, BLACK, GREEN, 1);
   } else {
-    //M5Cardputer.Display.drawChar(x, y, ch & 0x7f, WHITE, BLACK, 1);
     M5Cardputer.Display.drawChar(x, y, ch & 0x7f, BLACK, WHITE, 1);
   }
 #endif
@@ -6492,7 +6492,7 @@ void PlotChar (uint8_t ch, uint8_t line, uint8_t column) {
 // Clears the bottom line and then scrolls the display up by one line
 void ScrollDisplay () {
   #if defined(gfxsupport)
-  //M5Cardputer.Display.fillRect(0, 135-Leading, 240, 10, BLACK);
+  M5Cardputer.Display.fillRect(0, 135-(Leading + 3), 240, Leading+3, BLACK);
   for (uint8_t x = 0; x < Columns; x++) {
     char c = ScrollBuf[x][Scroll];
     for (uint8_t y = 0; y < Lines-1; y++) {
@@ -6508,7 +6508,7 @@ void ScrollDisplay () {
     }
   }
   // Tidy up graphics
-  for (uint8_t y = 0; y < Lines-1; y++) M5Cardputer.Display.fillRect(0, y*Leading+8, 240, 2, BLACK);
+  //for (uint8_t y = 0; y < Lines-1; y++) M5Cardputer.Display.fillRect(0, (y+1)*Leading, 240, 2, BLACK);
   M5Cardputer.Display.fillRect(238, 0, 3, 135, BLACK);
   for (int x=0; x<Columns; x++) ScrollBuf[x][Scroll] = 0;
   Scroll = (Scroll + 1) % Lines;
@@ -6585,8 +6585,7 @@ void Display (char c) {
 // Keyboard **********************************************************************************
 
 void initkybd () {
-  // The second I2C port is for the peripherals, for now just keyboard
-  // I2Cinit(&Wire1, TDECK_I2C_SDA, TDECK_I2C_SCL, 1);
+  // M5cardputer doesn't need anything here
 }
 
 // Parenthesis highlighting
@@ -6654,8 +6653,7 @@ void initenv () {
 void initgfx () {
   M5Cardputer.Display.setRotation(1);
   M5Cardputer.Display.clearDisplay(BLACK);
-  // M5Cardputer.Display.setTextFont(&fonts::FreeSerif9pt7b);
-  M5Cardputer.Display.setTextSize(0.5);
+  M5Cardputer.Display.setFont(&fonts::AsciiFont8x16);
   // M5Cardputer.Display.drawRect(0, 0, M5Cardputer.Display.width(),
   //                                M5Cardputer.Display.height() - 28, GREEN);
 }
