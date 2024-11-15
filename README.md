@@ -7,4 +7,4 @@ Follow [this tutorial](https://docs.m5stack.com/en/arduino/m5cardputer/program).
 ## Status
 - screen takes a few seconds to turn on when using battery, but not when using USB for some reason
 - not tested extensivly
-- Debating font size and font support
+- Trying bigger font; looks nicer and is easier to read but we fit less characters on screen (obviously)
