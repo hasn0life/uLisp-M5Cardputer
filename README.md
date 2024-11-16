@@ -1,5 +1,5 @@
 # The offical repo is here!!!
-[https://github.com/technoblogy/ulisp-tdeck](https://github.com/technoblogy/ulisp-cardputer) is the offical version, I'm keeping my repo up for historical reasons and possibly further experiements
+[https://github.com/technoblogy/ulisp-cardputer](https://github.com/technoblogy/ulisp-cardputer) is the offical version, I'm keeping my repo up for historical reasons and possibly further experiements
 
 # uLisp-M5Cardputer
 Initial port of uLisp for the [M5Cardputer](https://docs.m5stack.com/en/core/Cardputer)
